@@ -27,6 +27,8 @@ BW_CLI_MIN_VERSION = "1.20.0"
 
 SEARCH_ICON = "images/bitwarden-search.svg"
 UNLOCK_ICON = "images/bitwarden-search-locked.svg"
+LOCK_ICON = "images/bitwarden-lock.svg"
+SYNC_ICON = "images/bitwarden-sync.svg"
 EMPTY_ICON = "images/empty.png"
 ERROR_ICON = "images/error.svg"
 ITEM_ICON = "images/key.svg"
@@ -55,14 +57,14 @@ ENTER_QUERY_ITEM = ExtensionResultItem(
 )
 
 SYNC_ITEM = ExtensionResultItem(
-    icon=UNLOCK_ICON,
+    icon=SYNC_ICON,
     name="Sync Bitwarden",
     description="Synchronizes Bitwarden vault with the server",
     on_enter=ExtensionCustomAction({"action": "sync"}),
 )
 
 LOCK_ITEM = ExtensionResultItem(
-    icon=UNLOCK_ICON,
+    icon=LOCK_ICON,
     name="Lock Vault Bitwarden",
     description="Locks Bitwarden vault",
     on_enter=ExtensionCustomAction({"action": "lock"}),
