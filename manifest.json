@@ -1,6 +1,6 @@
 {
   "required_api_version": "^2.0.0",
-  "name": "Bitwarden Search",
+  "name": "Bitwarden",
   "description": "Quickly search your Bitwarden password manager database",
   "developer_name": "Krzysztof Bialek",
   "icon": "images/bitwarden-search.svg",
