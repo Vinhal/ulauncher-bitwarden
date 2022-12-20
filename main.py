@@ -58,14 +58,14 @@ ENTER_QUERY_ITEM = ExtensionResultItem(
 
 SYNC_ITEM = ExtensionResultItem(
     icon=SYNC_ICON,
-    name="Sync Bitwarden",
-    description="Synchronizes Bitwarden vault with the server",
+    name="Sync",
+    description="Synchronizes vault with the server",
     on_enter=ExtensionCustomAction({"action": "sync"}),
 )
 
 LOCK_ITEM = ExtensionResultItem(
     icon=LOCK_ICON,
-    name="Lock Vault Bitwarden",
+    name="Lock Vault",
     description="Locks Bitwarden vault",
     on_enter=ExtensionCustomAction({"action": "lock"}),
 )
