@@ -54,6 +54,20 @@ ENTER_QUERY_ITEM = ExtensionResultItem(
     on_enter=DoNothingAction(),
 )
 
+SYNC_ITEM = ExtensionResultItem(
+    icon=UNLOCK_ICON,
+    name="Sync Bitwarden",
+    description="Synchronizes Bitwarden vault with the server",
+    on_enter=ExtensionCustomAction({"action": "sync"}),
+)
+
+LOCK_ITEM = ExtensionResultItem(
+    icon=UNLOCK_ICON,
+    name="Lock Vault Bitwarden",
+    description="Locks Bitwarden vault",
+    on_enter=ExtensionCustomAction({"action": "lock"}),
+)
+
 NO_SEARCH_RESULTS_ITEM = ExtensionResultItem(
     icon=NOT_FOUND_ICON,
     name="No matching entries found...",
@@ -220,20 +234,14 @@ class KeywordQueryEventListener(EventListener):
 
         if query_keyword == extension.get_search_keyword():
             if not query_arg:
-                return RenderResultListAction([ENTER_QUERY_ITEM])
+                return RenderResultListAction([ENTER_QUERY_ITEM, SYNC_ITEM, LOCK_ITEM])
             else:
                 entries = self.bitwarden.search(query_arg)
                 return self.render_search_results(query_keyword, entries, extension)
         elif query_keyword == extension.get_sync_keyword():
-            if self.bitwarden.sync():
-                Notify.Notification.new("Bitwarden vault synchronized.").show()
-            else:
-                Notify.Notification.new("Error", "Bitwarden vault synchronization error.").show()
+            VaultHandlerActions(self.bitwarden).sync()
         elif query_keyword == extension.get_lock_keyword():
-            if self.bitwarden.lock():
-                Notify.Notification.new("Bitwarden vault locked.").show()
-            else:
-                Notify.Notification.new("Error", "Bitwarden vault locking error.").show()
+            VaultHandlerActions(self.bitwarden).lock()
 
 
 class ItemEnterEventListener(EventListener):
@@ -253,6 +261,10 @@ class ItemEnterEventListener(EventListener):
                 entry = data.get("entry", None)
                 extension.set_active_entry(keyword, entry)
                 return self.show_active_entry(entry["id"])
+            elif action == "sync":
+                return VaultHandlerActions(self.bitwarden).sync()
+            elif action == "lock":
+                return VaultHandlerActions(self.bitwarden).lock()
             elif action == "show_notification":
                 Notify.Notification.new(data.get("summary")).show()
         except BitwardenCliNotFoundError:
@@ -321,6 +333,24 @@ class PreferencesUpdateEventListener(EventListener):
                 self.bitwarden.change_inactivity_lock_timeout(int(event.new_value))
             elif event.id == "session-store-cmd":
                 self.bitwarden.change_session_store_cmd(event.new_value)
+
+class VaultHandlerActions():
+    """ VaultHandlerActions class used sync and lock vault """
+
+    def __init__(self, bitwarden):
+        self.bitwarden = bitwarden
+
+    def sync(self):
+        if self.bitwarden.sync():
+            Notify.Notification.new("Bitwarden vault synchronized.").show()
+        else:
+            Notify.Notification.new("Error", "Bitwarden vault synchronization error.").show()
+
+    def lock(self):
+        if self.bitwarden.lock():
+            Notify.Notification.new("Bitwarden vault locked.").show()
+        else:
+            Notify.Notification.new("Error", "Bitwarden vault locking error.").show()
 
 
 if __name__ == "__main__":
