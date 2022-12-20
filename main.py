@@ -66,7 +66,7 @@ SYNC_ITEM = ExtensionResultItem(
 LOCK_ITEM = ExtensionResultItem(
     icon=LOCK_ICON,
     name="Lock Vault",
-    description="Locks Bitwarden vault",
+    description="Lock Bitwarden vault",
     on_enter=ExtensionCustomAction({"action": "lock"}),
 )
 
