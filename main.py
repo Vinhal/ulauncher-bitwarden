@@ -202,20 +202,12 @@ class KeywordQueryEventListener(EventListener):
                     {"action": "activate_entry", "entry": e, "keyword": keyword},
                     keep_app_open=True,
                 )
-                alt_action = ExtensionCustomAction(
-                    {"action": "activate_entry", "entry": e, "keyword": keyword},
-                    keep_app_open=True,
-                )
-
-                icon = e.get("login", {}).get("uris", [{}])[0].get("uri")
-                icon = ITEM_ICON if icon is None else f"{icon}/favicon.ico"
                 items.append(
                     ExtensionResultItem(
-                        icon=icon,
+                        icon=ITEM_ICON,
                         name=e["name"],
                         description=self.bitwarden.get_folder(e["folderId"]),
                         on_enter=action,
-                        on_alt_enter=alt_action,
                     )
                 )
             if len(entries) > max_items:
